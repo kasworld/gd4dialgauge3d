@@ -62,20 +62,30 @@ func _ready() -> void:
 	add_camera_dict($MovingCameraLightAround, "Around")
 	$AxisArrow3D.set_colors().set_size(WorldSize.length()/20)
 	$FixedCameraLight.make_current()
-	$DialGauge.init(WorldSize.y/2, WorldSize.z/20
-	).init_range( [0,24], [PI*1.5,0]
-	).add_dial_num(WorldSize.y/2*0.85, WorldSize.z/100, 2, 12, Color.BLUE,
-	).add_dial_bar(WorldSize.y/2*0.99, Vector3(WorldSize.z/40, WorldSize.z/200, WorldSize.z/100),
-		DialGauge.BarAlign.In, 120, Color.GREEN
-	).add_dial_bar(WorldSize.y/2*0.99, Vector3(WorldSize.z/20, WorldSize.z/200, WorldSize.z/100),
-		DialGauge.BarAlign.In, 12, Color.DARK_GREEN
-	)
-var cur_rad := 0.0
+	$GlassCabinet.init(WorldSize)
+	dialgauge_demo($GlassCabinet)
+
+var dialgauge :DialGauge
+func dialgauge_demo(gc :GlassCabinet) -> void:
+	dialgauge = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
+		).init(gc.cabinet_size.y/2, gc.cabinet_size.z/20
+		).init_range( [0,24], [PI*1.5,0]
+		).add_dial_num(gc.cabinet_size.y/2*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
+		).add_dial_bar(gc.cabinet_size.y/2*0.99, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
+			DialGauge.BarAlign.In, 120, Color.GREEN
+		).add_dial_bar(gc.cabinet_size.y/2*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
+			DialGauge.BarAlign.In, 12, Color.DARK_GREEN
+		)
+	gc.add_child(dialgauge)
+var cur_val := 12.0
+func dialgauge_animate() -> void:
+	dialgauge.set_needle_value(cur_val)
+	cur_val += randfn(0,0.2)
+	cur_val = clampf(cur_val, 0,24)
+
 func _process(_delta: float) -> void:
-	$DialGauge.set_needle_value(cur_rad)
-	cur_rad += 24.0/120.0
-	if cur_rad > 24:
-		cur_rad = 0
+	dialgauge_animate()
+
 	var now := Time.get_unix_time_from_system()
 	label_demo()
 	if $MovingCameraLightHober.is_current_camera():

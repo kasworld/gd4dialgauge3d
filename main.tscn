@@ -1,8 +1,8 @@
 [gd_scene load_steps=12 format=3 uid="uid://c6maulcewyhy5"]
 
 [ext_resource type="Script" uid="uid://bgj25qi5j8dgh" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://clnf86bglf40d" path="res://glass_cabinet/glass_cabinet.tscn" id="5_5vw27"]
 [ext_resource type="PackedScene" uid="uid://dl14flc0fkeyt" path="res://axis_arrow_3d/axis_arrow_3d.tscn" id="5_7mycd"]
-[ext_resource type="PackedScene" uid="uid://bghys4klmis12" path="res://dial_gauge/dial_gauge.tscn" id="5_272bh"]
 [ext_resource type="PackedScene" uid="uid://c6cct2gj2a3im" path="res://timed_message/timed_message.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://ces3a6yv0c5fi" path="res://moving_carmera_light/moving_camera_light.tscn" id="8_5vw27"]
 
@@ -100,6 +100,6 @@ visible = false
 
 [node name="MovingCameraLightAround" parent="." instance=ExtResource("8_5vw27")]
 
-[node name="DialGauge" parent="." instance=ExtResource("5_272bh")]
+[node name="GlassCabinet" parent="." instance=ExtResource("5_5vw27")]
 
 [connection signal="item_selected" from="왼쪽패널/SelectCamera" to="." method="_on_select_camera_item_selected"]
