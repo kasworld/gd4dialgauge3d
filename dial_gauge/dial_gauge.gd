@@ -51,7 +51,7 @@ func add_dial_num(r :float, d:float, fsize :float, step_count :int, co :Color ) 
 	return self
 
 enum BarAlign {None, In,Mid,Out}
-func add_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int, co :Color):
+func add_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int, co :Color) -> DialGauge:
 	var bar_position := Vector3.ZERO
 	var tf_list := []
 	var rad_step :float = float(rad_range[1] - rad_range[0]) / step_count
@@ -78,6 +78,7 @@ func add_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int,
 		sm.multimesh.set_instance_transform(i,tf_list[i])
 	sm.set_color_all(co)
 	add_child(sm)
+	return self
 
 func new_text(fsize :float, fdepth :float, mat :Material, text :String) -> MeshInstance3D:
 	var mesh := TextMesh.new()
