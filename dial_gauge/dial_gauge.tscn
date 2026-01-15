@@ -1,0 +1,45 @@
+[gd_scene load_steps=10 format=3 uid="uid://bghys4klmis12"]
+
+[ext_resource type="Script" uid="uid://dcrypl53l2xia" path="res://dial_gauge/dial_gauge.gd" id="1_7yysf"]
+[ext_resource type="PackedScene" uid="uid://cfnbpemvoy1i6" path="res://multi_mesh_shape/multi_mesh_shape.tscn" id="2_g7w51"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn0gn"]
+transparency = 1
+albedo_color = Color(1, 1, 1, 0.4862745)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_eliwg"]
+material = SubResource("StandardMaterial3D_bn0gn")
+flip_faces = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7yysf"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_g7w51"]
+material = SubResource("StandardMaterial3D_7yysf")
+
+[sub_resource type="MultiMesh" id="MultiMesh_c8wkp"]
+resource_local_to_scene = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g7w51"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_c8wkp"]
+material = SubResource("StandardMaterial3D_g7w51")
+
+[node name="DialGauge" type="Node3D"]
+script = ExtResource("1_7yysf")
+
+[node name="Case" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_eliwg")
+
+[node name="Center" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_g7w51")
+
+[node name="ScaleMarks" parent="." instance=ExtResource("2_g7w51")]
+multimesh = SubResource("MultiMesh_c8wkp")
+
+[node name="NeedleBase" type="Node3D" parent="."]
+
+[node name="Needle" type="MeshInstance3D" parent="NeedleBase"]
+mesh = SubResource("BoxMesh_c8wkp")
+skeleton = NodePath("../..")

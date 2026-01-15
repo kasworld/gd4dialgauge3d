@@ -1,0 +1,105 @@
+[gd_scene load_steps=12 format=3 uid="uid://c6maulcewyhy5"]
+
+[ext_resource type="Script" uid="uid://bgj25qi5j8dgh" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://dl14flc0fkeyt" path="res://axis_arrow_3d/axis_arrow_3d.tscn" id="5_7mycd"]
+[ext_resource type="PackedScene" uid="uid://bghys4klmis12" path="res://dial_gauge/dial_gauge.tscn" id="5_272bh"]
+[ext_resource type="PackedScene" uid="uid://c6cct2gj2a3im" path="res://timed_message/timed_message.tscn" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://ces3a6yv0c5fi" path="res://moving_carmera_light/moving_camera_light.tscn" id="8_5vw27"]
+
+[sub_resource type="Theme" id="Theme_h2yge"]
+default_font_size = 48
+
+[sub_resource type="SystemFont" id="SystemFont_bejao"]
+
+[sub_resource type="Theme" id="Theme_7mycd"]
+resource_local_to_scene = true
+default_font = SubResource("SystemFont_bejao")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_lquwl"]
+
+[sub_resource type="Sky" id="Sky_lquwl"]
+sky_material = SubResource("ProceduralSkyMaterial_lquwl")
+
+[sub_resource type="Environment" id="Environment_7mycd"]
+background_mode = 2
+sky = SubResource("Sky_lquwl")
+ambient_light_source = 3
+ambient_light_color = Color(1, 1, 1, 1)
+reflected_light_source = 2
+glow_normalized = true
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_ig7tw")
+
+[node name="왼쪽패널" type="VBoxContainer" parent="."]
+offset_right = 40.0
+offset_bottom = 138.0
+theme = SubResource("Theme_h2yge")
+
+[node name="SelectCamera" type="OptionButton" parent="왼쪽패널"]
+layout_mode = 2
+
+[node name="LabelReel" type="Label" parent="왼쪽패널"]
+layout_mode = 2
+
+[node name="LabelWheel" type="Label" parent="왼쪽패널"]
+layout_mode = 2
+
+[node name="LabelTree" type="Label" parent="왼쪽패널"]
+layout_mode = 2
+
+[node name="오른쪽패널" type="VBoxContainer" parent="."]
+modulate = Color(1, 1, 1, 0.501961)
+offset_right = 344.0
+offset_bottom = 371.0
+theme = SubResource("Theme_h2yge")
+
+[node name="LabelPerformance" type="Label" parent="오른쪽패널"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="LabelInfo" type="Label" parent="오른쪽패널"]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="TimedMessage" parent="." instance=ExtResource("5_lquwl")]
+self_modulate = Color(1, 1, 1, 0.498039)
+theme = SubResource("Theme_7mycd")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 5, 15)
+shadow_enabled = true
+shadow_opacity = 0.5
+omni_range = 1000.0
+omni_attenuation = 0.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 1000.0
+sky_mode = 1
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, -0.5, -0.5, 0, 0.707107, -0.707107, 0.707107, 0.5, 0.5, 0, 0, 0)
+visible = false
+shadow_enabled = true
+shadow_opacity = 0.5
+sky_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7mycd")
+
+[node name="AxisArrow3D" parent="." instance=ExtResource("5_7mycd")]
+visible = false
+
+[node name="FixedCameraLight" parent="." instance=ExtResource("8_5vw27")]
+
+[node name="CenterCameraLight" parent="." instance=ExtResource("8_5vw27")]
+
+[node name="MovingCameraLightHober" parent="." instance=ExtResource("8_5vw27")]
+
+[node name="MovingCameraLightAround" parent="." instance=ExtResource("8_5vw27")]
+
+[node name="DialGauge" parent="." instance=ExtResource("5_272bh")]
+
+[connection signal="item_selected" from="왼쪽패널/SelectCamera" to="." method="_on_select_camera_item_selected"]
