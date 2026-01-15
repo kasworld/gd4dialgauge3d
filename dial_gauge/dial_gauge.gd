@@ -3,6 +3,17 @@ class_name DialGauge
 
 var font := preload("res://font/HakgyoansimBareondotumR.ttf")
 
+
+var current_value :float
+var value_range :Array # [min, max]
+var rad_range :Array # [min, max]
+
+func init_range(v :float, v_range :Array, r_range :Array ) -> DialGauge:
+	current_value = v
+	value_range = v_range
+	rad_range = r_range
+	return self
+
 func init(radius :float, depth :float) -> DialGauge:
 	init_case(radius, depth, Color(1,1,1,0.5) )
 	init_center(radius/10, depth/2, Color(0.5,0.5,0.5))
@@ -29,32 +40,28 @@ func init_needle(radius :float, depth :float, co :Color) -> DialGauge:
 	$NeedleBase/Needle.mesh.material.albedo_color = co
 	return self
 
-func init_dial_num(r :float, d:float, fsize :float, num_range :Array, rad_range :Array, co :Color ) -> DialGauge:
+func init_dial_num(r :float, d:float, fsize :float, step_count :int, co :Color ) -> DialGauge:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = co
-	if num_range.size() == 2:
-		num_range.append(1)
-	var rad_step :float = float(rad_range[1] - rad_range[0]) / float(num_range[1] - num_range[0] ) * num_range[2]
-	var rad_cursor :float = rad_range[0]
-	num_range[1] += 1
-	for num in range.callv(num_range):
-		var t := new_text(fsize, d, mat, "%d" % [num])
-		t.position = Vector3(cos(rad_cursor)*r, sin(rad_cursor)*r, 0)
+	var rad_step :float = float(rad_range[1] - rad_range[0]) / step_count
+	var value_step :float = (value_range[1] - value_range[0]) / step_count
+	for i in step_count+1:
+		var val :float = value_range[0] + value_step*i
+		var rad :float = rad_range[0] + rad_step * i
+		var t := new_text(fsize, d, mat, "%s" % [val])
+		t.position = Vector3(cos(rad)*r, sin(rad)*r, 0)
 		add_child(t)
-		rad_cursor += rad_step
 	return self
 
 enum BarAlign {None, In,Mid,Out}
-func init_dial_bar(r :float, bar_size :Vector3, align :BarAlign, rad_range :Array,   co :Color):
+func init_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int, co :Color):
 	# Set the transform of the instances.
 	var bar_position := Vector3.ZERO
 	var tf_list := []
-	if rad_range[0] > rad_range[1]:
-		rad_range = [rad_range[1], rad_range[0], -rad_range[2]]
-	var rad :float = rad_range[0]
-	while rad < rad_range[1]+ rad_range[2]:
+	var rad_step :float = float(rad_range[1] - rad_range[0]) / step_count
+	for i in step_count+1:
+		var rad :float = rad_range[0] + rad_step * i
 		var bar_center := Vector3(cos(rad)*r, sin(rad)*r,  0)
-		#var	bar_size := Vector3(bar_len, bar_width, bar_depth)
 		match align:
 			BarAlign.In :
 				bar_position = bar_center*(1 - bar_size.x/r/2)
@@ -67,7 +74,6 @@ func init_dial_bar(r :float, bar_size :Vector3, align :BarAlign, rad_range :Arra
 		t = t.rotated_local(Vector3.BACK, rad)
 		t = t.scaled_local( bar_size )
 		tf_list.append(t)
-		rad += rad_range[2]
 
 	var mesh := BoxMesh.new()
 	mesh.material = MultiMeshShape.make_color_material()

@@ -63,9 +63,10 @@ func _ready() -> void:
 	$AxisArrow3D.set_colors().set_size(WorldSize.length()/20)
 	$FixedCameraLight.make_current()
 	$DialGauge.init(WorldSize.y/2, WorldSize.z/20
-	).init_dial_num(WorldSize.y/2*0.9, WorldSize.z/100, 5, [0,24,3], [PI,0] , Color.REBECCA_PURPLE,
+	).init_range( 0, [0,24], [PI,0]
+	).init_dial_num(WorldSize.y/2*0.9, WorldSize.z/100, 5, 12, Color.REBECCA_PURPLE,
 	).init_dial_bar(WorldSize.y/2, Vector3(WorldSize.z/20, WorldSize.z/100, WorldSize.z/200),
-		DialGauge.BarAlign.In, [PI,0, -PI/30], Color.GREEN)
+		DialGauge.BarAlign.In, 24, Color.GREEN)
 	$DialGauge.set_needle_angle(randf_range(0,2*PI))
 
 func _process(_delta: float) -> void:
