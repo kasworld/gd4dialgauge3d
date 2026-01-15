@@ -3,7 +3,6 @@ class_name DialGauge
 
 var font := preload("res://font/HakgyoansimBareondotumR.ttf")
 
-
 var current_value :float
 var value_range :Array # [min, max]
 var rad_range :Array # [min, max]
@@ -40,7 +39,7 @@ func init_needle(radius :float, depth :float, co :Color) -> DialGauge:
 	$NeedleBase/Needle.mesh.material.albedo_color = co
 	return self
 
-func init_dial_num(r :float, d:float, fsize :float, step_count :int, co :Color ) -> DialGauge:
+func add_dial_num(r :float, d:float, fsize :float, step_count :int, co :Color ) -> DialGauge:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = co
 	var rad_step :float = float(rad_range[1] - rad_range[0]) / step_count
@@ -50,12 +49,11 @@ func init_dial_num(r :float, d:float, fsize :float, step_count :int, co :Color )
 		var rad :float = rad_range[0] + rad_step * i
 		var t := new_text(fsize, d, mat, "%s" % [val])
 		t.position = Vector3(cos(rad)*r, sin(rad)*r, 0)
-		add_child(t)
+		$NumberContainer.add_child(t)
 	return self
 
 enum BarAlign {None, In,Mid,Out}
-func init_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int, co :Color):
-	# Set the transform of the instances.
+func add_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int, co :Color):
 	var bar_position := Vector3.ZERO
 	var tf_list := []
 	var rad_step :float = float(rad_range[1] - rad_range[0]) / step_count
@@ -74,13 +72,14 @@ func init_dial_bar(r :float, bar_size :Vector3, align :BarAlign, step_count :int
 		t = t.rotated_local(Vector3.BACK, rad)
 		t = t.scaled_local( bar_size )
 		tf_list.append(t)
-
 	var mesh := BoxMesh.new()
 	mesh.material = MultiMeshShape.make_color_material()
-	$ScaleMarks.init_with_color_mesh(mesh, tf_list.size(), 1.0)
+	var sm :MultiMeshShape = preload("res://multi_mesh_shape/multi_mesh_shape.tscn").instantiate(
+		).init_with_color_mesh(mesh, tf_list.size(), 1.0)
 	for i in tf_list.size():
-		$ScaleMarks.multimesh.set_instance_transform(i,tf_list[i])
-	$ScaleMarks.set_color_all(co)
+		sm.multimesh.set_instance_transform(i,tf_list[i])
+	sm.set_color_all(co)
+	add_child(sm)
 
 func new_text(fsize :float, fdepth :float, mat :Material, text :String) -> MeshInstance3D:
 	var mesh := TextMesh.new()
