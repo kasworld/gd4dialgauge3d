@@ -63,13 +63,17 @@ func _ready() -> void:
 	$AxisArrow3D.set_colors().set_size(WorldSize.length()/20)
 	$FixedCameraLight.make_current()
 	$DialGauge.init(WorldSize.y/2, WorldSize.z/20
-	).init_range( 0, [0,24], [PI,0]
+	).init_range( [0,24], [PI,0]
 	).add_dial_num(WorldSize.y/2*0.9, WorldSize.z/100, 5, 12, Color.REBECCA_PURPLE,
 	).add_dial_bar(WorldSize.y/2, Vector3(WorldSize.z/20, WorldSize.z/100, WorldSize.z/200),
 		DialGauge.BarAlign.In, 24, Color.GREEN)
-	$DialGauge.set_needle_angle(randf_range(0,2*PI))
 
+var cur_rad := 0.0
 func _process(_delta: float) -> void:
+	$DialGauge.set_needle_value(cur_rad)
+	cur_rad += 24.0/60.0
+	if cur_rad > 24:
+		cur_rad = 0
 	var now := Time.get_unix_time_from_system()
 	label_demo()
 	if $MovingCameraLightHober.is_current_camera():

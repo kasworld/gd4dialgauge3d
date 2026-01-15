@@ -3,12 +3,10 @@ class_name DialGauge
 
 var font := preload("res://font/HakgyoansimBareondotumR.ttf")
 
-var current_value :float
-var value_range :Array # [min, max]
-var rad_range :Array # [min, max]
+var value_range :Array # [from, to] not min max
+var rad_range :Array # [from, to] not min max
 
-func init_range(v :float, v_range :Array, r_range :Array ) -> DialGauge:
-	current_value = v
+func init_range(v_range :Array, r_range :Array ) -> DialGauge:
 	value_range = v_range
 	rad_range = r_range
 	return self
@@ -92,5 +90,8 @@ func new_text(fsize :float, fdepth :float, mat :Material, text :String) -> MeshI
 	sp.mesh = mesh
 	return sp
 
-func set_needle_angle(rad :float) -> void:
+func set_needle_value(v :float) -> void:
+	#v = clampf(v, value_range[0], value_range[1])
+	var rate :float = (v- value_range[0]) / (value_range[1]- value_range[0])
+	var rad :float = (rad_range[1]- rad_range[0])*rate + rad_range[0]
 	$NeedleBase.rotation.z = rad
