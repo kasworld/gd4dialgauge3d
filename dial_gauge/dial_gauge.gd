@@ -17,8 +17,6 @@ func value_range_len() -> float:
 func value_range_mid() -> float:
 	return (value_range[0] + value_range[1]) /2
 
-
-
 func init_range(v_range :Array, r_range :Array ) -> DialGauge:
 	value_range = v_range
 	rad_range = r_range

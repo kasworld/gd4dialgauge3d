@@ -69,45 +69,45 @@ func make_rand_range(v :float, l :float) -> Array:
 	var r1 := randf_range(v,v+l)
 	var r2 := randf_range(r1+l/2,r1+l)
 	return [r1,r2]
-
+func random_color() -> Color:
+	return NamedColorList.color_list.pick_random()[0]
+func new_dialgauge(radius :float, cabinet_size :Vector3) -> DialGauge:
+	return preload("res://dial_gauge/dial_gauge.tscn").instantiate(
+		).init(radius, cabinet_size.z/20, random_color(),random_color(),random_color(),
+		).init_range( make_rand_range(0,360), make_rand_range(0,2*PI)
+		).add_dial_num(radius*0.80, cabinet_size.z/100, radius/20, 12, random_color(),
+		).add_dial_bar(radius*0.92, Vector3(cabinet_size.z/40, cabinet_size.z/200, cabinet_size.z/100),
+			DialGauge.BarAlign.Out, 60, random_color()
+		).add_dial_bar(radius*0.92, Vector3(cabinet_size.z/40, cabinet_size.z/200, cabinet_size.z/100),
+			DialGauge.BarAlign.In, 12, random_color()
+		)
 var dialgauge_list :Array
 func dialgauge_demo(gc :GlassCabinet) -> void:
 	var radius := gc.cabinet_size.x/5
-	var dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
-		).init(radius, gc.cabinet_size.z/20, random_color(),random_color(),random_color(),
-		).init_range( make_rand_range(0,360), make_rand_range(0,2*PI)
-		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 1.5, 12, random_color(),
-		).add_dial_bar(radius*0.92, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.Out, 60, random_color()
-		).add_dial_bar(radius*0.92, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.In, 12, random_color()
-		)
+	var dg = new_dialgauge(radius, gc.cabinet_size)
 	dg.position = gc.calc_pos_by_grid(0,0,2,1)
 	gc.add_child(dg)
 	dialgauge_list.append([dg, dg.value_range_mid()])
-	radius = gc.cabinet_size.x/5
-	dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
-		).init(radius, gc.cabinet_size.z/20,random_color(),random_color(),random_color(),
-		).init_range( make_rand_range(0,360), make_rand_range(0,2*PI)
-		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 1.5, 24, random_color(),
-		).add_dial_bar(radius*0.92, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.Out, 60, random_color()
-		).add_dial_bar(radius*0.92, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.In, 12, random_color()
-		)
+	dg = new_dialgauge(radius, gc.cabinet_size)
 	dg.position = gc.calc_pos_by_grid(1,0,2,1)
 	gc.add_child(dg)
 	dialgauge_list.append([dg, dg.value_range_mid()])
-
+	radius = gc.cabinet_size.x/10
+	dg = new_dialgauge(radius, gc.cabinet_size)
+	dg.position = gc.calc_pos_by_grid(1,0,3,3)
+	gc.add_child(dg)
+	dialgauge_list.append([dg, dg.value_range_mid()])
+	dg = new_dialgauge(radius, gc.cabinet_size)
+	dg.position = gc.calc_pos_by_grid(1,2,3,3)
+	gc.add_child(dg)
+	dialgauge_list.append([dg, dg.value_range_mid()])
 
 func dialgauge_animate() -> void:
 	for dg in dialgauge_list:
-		dg[1] += randfn(0,0.2)
+		dg[1] += randfn(0,1)*dg[0].value_range_len()/100
 		dg[1] = dg[0].clamp_value(dg[1])
 		dg[0].set_needle_value(dg[1])
 
-func random_color() -> Color:
-	return NamedColorList.color_list.pick_random()[0]
 
 
 func _process(_delta: float) -> void:
