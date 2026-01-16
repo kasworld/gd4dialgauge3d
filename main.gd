@@ -67,17 +67,34 @@ func _ready() -> void:
 
 var dialgauge_list :Array
 func dialgauge_demo(gc :GlassCabinet) -> void:
+	var radius := gc.cabinet_size.x/5
 	var dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
-		).init(gc.cabinet_size.y/2, gc.cabinet_size.z/20
+		).init(radius, gc.cabinet_size.z/20
 		).init_range( [0,24], [PI*1.5,0]
-		).add_dial_num(gc.cabinet_size.y/2*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
-		).add_dial_bar(gc.cabinet_size.y/2*0.99, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
+		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
+		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
 			DialGauge.BarAlign.In, 120, Color.GREEN
-		).add_dial_bar(gc.cabinet_size.y/2*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
+		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
 			DialGauge.BarAlign.In, 12, Color.DARK_GREEN
 		)
+	dg.position = gc.calc_pos_by_grid(0,0,2,1)
 	gc.add_child(dg)
 	dialgauge_list.append([dg, 0.0])
+	radius = gc.cabinet_size.x/5
+	dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
+		).init(radius, gc.cabinet_size.z/20
+		).init_range( [0,24], [PI*1.5,0]
+		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
+		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
+			DialGauge.BarAlign.In, 120, Color.GREEN
+		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
+			DialGauge.BarAlign.In, 12, Color.DARK_GREEN
+		)
+	dg.position = gc.calc_pos_by_grid(1,0,2,1)
+	gc.add_child(dg)
+	dialgauge_list.append([dg, 0.0])
+
+
 func dialgauge_animate() -> void:
 	for dg in dialgauge_list:
 		dg[1] += randfn(0,0.2)

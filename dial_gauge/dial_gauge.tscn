@@ -3,21 +3,27 @@
 [ext_resource type="Script" uid="uid://dcrypl53l2xia" path="res://dial_gauge/dial_gauge.gd" id="1_7yysf"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bn0gn"]
+resource_local_to_scene = true
 transparency = 1
 albedo_color = Color(1, 1, 1, 0.4862745)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_eliwg"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_bn0gn")
 flip_faces = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7yysf"]
+resource_local_to_scene = true
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_g7w51"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_7yysf")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g7w51"]
+resource_local_to_scene = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_c8wkp"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_g7w51")
 
 [node name="DialGauge" type="Node3D"]
