@@ -6,6 +6,19 @@ var font := preload("res://font/HakgyoansimBareondotumR.ttf")
 var value_range :Array # [from, to] not min max
 var rad_range :Array # [from, to] not min max
 
+func clamp_value(v :float) -> float:
+	if value_range[0] < value_range[1]:
+		return clampf(v, value_range[0] , value_range[1])
+	return clampf(v, value_range[1] , value_range[0])
+
+func value_range_len() -> float:
+	return abs(value_range[0] - value_range[1])
+
+func value_range_mid() -> float:
+	return (value_range[0] + value_range[1]) /2
+
+
+
 func init_range(v_range :Array, r_range :Array ) -> DialGauge:
 	value_range = v_range
 	rad_range = r_range
@@ -44,12 +57,12 @@ func init_needle(radius :float, depth :float, co :Color) -> DialGauge:
 func add_dial_num(r :float, d:float, fsize :float, step_count :int, co :Color ) -> DialGauge:
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = co
-	var rad_step :float = float(rad_range[1] - rad_range[0]) / step_count
-	var value_step :float = (value_range[1] - value_range[0]) / step_count
+	var rad_step :float = float(rad_range[1] - rad_range[0]) / float(step_count)
+	var value_step :float = (value_range[1] - value_range[0]) / float(step_count)
 	for i in step_count+1:
 		var val :float = value_range[0] + value_step*i
 		var rad :float = rad_range[0] + rad_step * i
-		var t := new_text(fsize, d, mat, "%s" % [val])
+		var t := new_text(fsize, d, mat, "%.1f" % [val])
 		t.position = Vector3(cos(rad)*r, sin(rad)*r, 0)
 		$NumberContainer.add_child(t)
 	return self
