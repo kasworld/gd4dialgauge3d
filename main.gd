@@ -69,26 +69,26 @@ var dialgauge_list :Array
 func dialgauge_demo(gc :GlassCabinet) -> void:
 	var radius := gc.cabinet_size.x/5
 	var dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
-		).init(radius, gc.cabinet_size.z/20
+		).init(radius, gc.cabinet_size.z/20,random_color(),random_color(),random_color(),
 		).init_range( [0,24], [PI*1.5,0]
-		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
+		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 1.5, 12, random_color(),
 		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.In, 120, Color.GREEN
+			DialGauge.BarAlign.In, 120, random_color()
 		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.In, 12, Color.DARK_GREEN
+			DialGauge.BarAlign.In, 12, random_color()
 		)
 	dg.position = gc.calc_pos_by_grid(0,0,2,1)
 	gc.add_child(dg)
 	dialgauge_list.append([dg, 0.0])
 	radius = gc.cabinet_size.x/5
 	dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
-		).init(radius, gc.cabinet_size.z/20
+		).init(radius, gc.cabinet_size.z/20,random_color(),random_color(),random_color(),
 		).init_range( [0,24], [PI*1.5,0]
-		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
+		).add_dial_num(radius*0.85, gc.cabinet_size.z/100, 1.5, 12, random_color(),
 		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/40, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.In, 120, Color.GREEN
+			DialGauge.BarAlign.In, 120, random_color()
 		).add_dial_bar(radius*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
-			DialGauge.BarAlign.In, 12, Color.DARK_GREEN
+			DialGauge.BarAlign.In, 12, random_color()
 		)
 	dg.position = gc.calc_pos_by_grid(1,0,2,1)
 	gc.add_child(dg)
@@ -100,6 +100,10 @@ func dialgauge_animate() -> void:
 		dg[1] += randfn(0,0.2)
 		dg[1] = clampf(dg[1], 0,24)
 		dg[0].set_needle_value(dg[1])
+
+func random_color() -> Color:
+	return NamedColorList.color_list.pick_random()[0]
+
 
 func _process(_delta: float) -> void:
 	dialgauge_animate()

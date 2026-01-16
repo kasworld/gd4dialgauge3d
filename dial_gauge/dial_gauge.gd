@@ -11,10 +11,14 @@ func init_range(v_range :Array, r_range :Array ) -> DialGauge:
 	rad_range = r_range
 	return self
 
-func init(radius :float, depth :float) -> DialGauge:
-	init_case(radius, depth, Color(1,1,1,0.5) )
-	init_center(radius/10, depth/2, Color(0.5,0.5,0.5))
-	init_needle(radius*0.9, depth*0.3, Color.RED)
+func init(radius :float, depth :float,
+	case_color :Color = Color(1,1,1,0.5),
+	center_color :Color = Color(0.5,0.5,0.5),
+	needle_color :Color = Color.RED
+	) -> DialGauge:
+	init_case(radius, depth, case_color )
+	init_center(radius/10, depth/2, center_color)
+	init_needle(radius*0.9, depth*0.3, needle_color)
 	return self
 
 func init_case(radius :float, depth :float, co :Color) -> DialGauge:
