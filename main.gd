@@ -65,9 +65,9 @@ func _ready() -> void:
 	$GlassCabinet.init(WorldSize)
 	dialgauge_demo($GlassCabinet)
 
-var dialgauge :DialGauge
+var dialgauge_list :Array
 func dialgauge_demo(gc :GlassCabinet) -> void:
-	dialgauge = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
+	var dg = preload("res://dial_gauge/dial_gauge.tscn").instantiate(
 		).init(gc.cabinet_size.y/2, gc.cabinet_size.z/20
 		).init_range( [0,24], [PI*1.5,0]
 		).add_dial_num(gc.cabinet_size.y/2*0.85, gc.cabinet_size.z/100, 2, 12, Color.BLUE,
@@ -76,12 +76,13 @@ func dialgauge_demo(gc :GlassCabinet) -> void:
 		).add_dial_bar(gc.cabinet_size.y/2*0.99, Vector3(gc.cabinet_size.z/20, gc.cabinet_size.z/200, gc.cabinet_size.z/100),
 			DialGauge.BarAlign.In, 12, Color.DARK_GREEN
 		)
-	gc.add_child(dialgauge)
-var cur_val := 12.0
+	gc.add_child(dg)
+	dialgauge_list.append([dg, 0.0])
 func dialgauge_animate() -> void:
-	dialgauge.set_needle_value(cur_val)
-	cur_val += randfn(0,0.2)
-	cur_val = clampf(cur_val, 0,24)
+	for dg in dialgauge_list:
+		dg[1] += randfn(0,0.2)
+		dg[1] = clampf(dg[1], 0,24)
+		dg[0].set_needle_value(dg[1])
 
 func _process(_delta: float) -> void:
 	dialgauge_animate()
